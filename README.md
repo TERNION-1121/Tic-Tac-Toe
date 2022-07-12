@@ -1,4 +1,5 @@
-# Tic-Tac-Toe
+<h1 align = "center">Tic-Tac-Toe</h1>
+ <br>
  
 This program is a two-player, Tic-Tac-Toe boardgame, which can be played in the terminal/console window.
 - `xState = [0,0,0,0,0,0,0,0,0]` :  This list stores the positions where `X` has been marked.
