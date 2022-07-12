@@ -1,7 +1,7 @@
-<h1 align = "center">Tic-Tac-Toe</h1>
+<h1 align = "center">❌ Tic-Tac-Toe ⭕</h1>
  <br>
  
-This program is a two-player, Tic-Tac-Toe boardgame, which can be played in the terminal/console window.
+This program is a two-player, Tic-Tac-Toe boardgame, which can be played in the terminal/console window; made in Python.
 - `xState = [0,0,0,0,0,0,0,0,0]` :  This list stores the positions where `X` has been marked.
 - `oState = [0,0,0,0,0,0,0,0,0]` :  This list stores the positions where `O` has been marked.
 
