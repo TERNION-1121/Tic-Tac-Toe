@@ -6,11 +6,13 @@ class Player():
 class Board():
     GRID_COLOR = (200, 200, 200)
     SQUARE_COLOR = (10, 10, 10)
-    grid = [dict.fromkeys(list(range(i-2, i+1)), None) for i in range(3, 10, 3)]
+    grid = [[j for j in range(3)] for i in range(3)]
 
     height = 720; width = 720
     window = pygame.display.set_mode((height, width))
     window.fill(GRID_COLOR)
+
+    square_size = height // 3
 
     @staticmethod
     def check_quit():
@@ -22,11 +24,12 @@ class Board():
 
     @staticmethod
     def make_board():
-        for row in Board.grid:
-            for column in row:
-                x = 0
-                y = 0
-                pygame.draw.rect(Board.window, Board.SQUARE_COLOR, pygame.Rect())
+        for row in range(len(Board.grid)):
+            for column in range(len(Board.grid[row])):
+                x = Board.square_size * column
+                y = Board.square_size * row
+                pygame.draw.rect(Board.window, Board.SQUARE_COLOR, pygame.Rect(x, y, Board.square_size - 1, Board.square_size - 1))
+        pygame.display.flip()
 
     @staticmethod
     def main():
