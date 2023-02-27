@@ -24,11 +24,6 @@ void main() {
 
     game_over = 0;
     
-    // int pos[] = { 1, 1, -1, -1, 0, -1, 0, 0, 0};
-    // board(pos);
-    // int best_move = find_best_move(pos, 1);
-    // pos[best_move] = 1;
-    // board(pos);
     while (!game_over) {
         game_choice = home_menu();
         switch (game_choice) {
@@ -195,17 +190,19 @@ void human_vs_human()
         }
         else if (iterations == 9) {  // draw
             board(positions);
+            DOUBLE_NEWLINE;
             printf("Draw!\n");
             running = 0;
         }
         turn *= -1; // reverse turn
-            
+
         if (error) {
             printf("Invalid square choice!\n\
     >>> Square either already occupied or Square number out of range(0-8)!\n\n\
 Try again!\n");
             turn *= -1;
             error = 0;
+            --iterations;
         }
     }
     DOUBLE_NEWLINE;
@@ -263,8 +260,8 @@ Try again!\n");
             goto gameOver;
 
         best_move = find_best_move(positions, ai);
-        positions[best_move] = ai;
         board(positions);
+        positions[best_move] = ai;
         DOUBLE_NEWLINE;
         printf("A.I. picks square %d\n", best_move);
         DOUBLE_NEWLINE;
@@ -296,6 +293,14 @@ Try again!\n");
     
 }
 
+int is_moves_left(int p[])
+{
+    for (int i = 0; i <= 8; ++i)
+        if (p[i] == 0)
+            return 1;
+    return 0;
+}
+
 int find_best_move(int positions[], int player)
 {
     int minimax(int [], int, int);
@@ -307,7 +312,7 @@ int find_best_move(int positions[], int player)
         if (positions[i] == 0) {
             positions[i] = player;
 
-            int moveVal = minimax(positions, 0, player == 1 ? 1 : 0);
+            int moveVal = minimax(positions, 9, player == 1 ? 0 : 1);
 
             positions[i] = 0;
         
@@ -332,9 +337,10 @@ int minimax(int p[], int depth, int maximizingPlayer)
 {   
     int max(int, int);
     int min(int, int);
+    int is_moves_left(int []);
 
     int val;
-    if ((val = evaluate(p)) == 1 || val == -1 || val == 0 || depth == 0)
+    if ((val = evaluate(p)) == 1 || val == -1 || !is_moves_left(p) || depth == 0)
         return val;
     if (maximizingPlayer) {
         int maxEval = -1000;
