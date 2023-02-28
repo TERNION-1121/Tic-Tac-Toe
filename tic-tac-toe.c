@@ -250,7 +250,7 @@ void human_vs_ai()
 
             if (user_choice < 0 || user_choice > 8)
                 error = 1;
-            if (positions[user_choice] == 0) {
+            else if (positions[user_choice] == 0) {
                 positions[user_choice] = human;
                 iterations++;
                 error = 0;
@@ -304,20 +304,20 @@ int find_best_move(int positions[])
 {
     int minimax(int [], int, int);
 
-    int best_move = -1000;
+    int best_val = -1000;
     int best_pos = -1;
 
     for (int i = 0; i <= 8; ++i) {
         if (positions[i] == 0) {
             positions[i] = 1;
 
-            int moveVal = minimax(positions, 0, 1);
+            int moveVal = minimax(positions, 0, 0);
 
             positions[i] = 0;
         
-            if (moveVal > best_move) {
+            if (moveVal > best_val) {
                 best_pos = i;
-                best_move = moveVal;
+                best_val = moveVal;
             }
         }
     }
