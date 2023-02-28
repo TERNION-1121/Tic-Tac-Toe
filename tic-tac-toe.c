@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<time.h>
 
 #define REPR(pos) (pos == -1) ? 'X' : ((pos == 1) ? 'O' : ' ')   
 #define WHOSE_TURN(num) (num == 1) ? 'O' : 'X'
@@ -8,9 +9,6 @@
 int garbage;
 
 void main() {
-    int find_best_move(int []);
-    int evaluate(int []);
-    int moves_left(int []);
     char home_menu();
 
     void board(int []);
@@ -23,7 +21,7 @@ void main() {
     char game_choice;
 
     game_over = 0;
-    
+
     while (!game_over) {
         game_choice = home_menu();
         switch (game_choice) {
@@ -80,7 +78,7 @@ char home_menu() {
     printf("Press:\n");
     printf("\'H\' for help.\n");
     printf("\'1\' to play Human v/s Human.\n");
-    printf("\'2\' to play Human v/s AI (coming soon...).\n");
+    printf("\'2\' to play Human v/s AI.\n");
     printf("\'E\' to exit.\n");
     DOUBLE_NEWLINE;
     scanf("%c", &choice);
@@ -214,6 +212,7 @@ Try again!\n");
 void human_vs_ai()
 {   
     int find_best_move(int []);
+    int random_pos();
 
     int positions[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     int iterations;
@@ -229,14 +228,19 @@ void human_vs_ai()
     ai = 1, human = -1;
 
     while (running) {
-        best_move = find_best_move(positions);
-        board(positions);
-        positions[best_move] = ai;
-        DOUBLE_NEWLINE;
-        printf("A.I. picks square %d\n", best_move);
-        DOUBLE_NEWLINE;
         ++iterations;
-
+        if (iterations == 1) {
+            positions[random_pos()] = ai;
+            
+        }
+        else {
+            best_move = find_best_move(positions);
+            board(positions);
+            positions[best_move] = ai;
+            DOUBLE_NEWLINE;
+            printf("A.I. picks square %d\n", best_move);
+            DOUBLE_NEWLINE;
+        }
         win_val = evaluate(positions);
         if (win_val == 1 || win_val == -1 || iterations == 9) 
             goto gameOver;
@@ -270,16 +274,19 @@ Try again!\n");
             win_val = evaluate(positions);
             if (win_val == 1) {
                 board(positions);
-                printf("'O' Won!\n");
+                DOUBLE_NEWLINE;
+                printf("AI Won!\n");
                 running = 0;
             }
             else if (win_val == -1) {
                 board(positions);
-                printf("\n\'X\' Won!\n");
+                DOUBLE_NEWLINE;
+                printf("You Won!\n");
                 running = 0;
             }
             else if (iterations == 9) {  // draw
                 board(positions);
+                DOUBLE_NEWLINE;
                 printf("Draw!\n");
                 running = 0;
             }
@@ -290,6 +297,12 @@ Try again!\n");
     scanf("%d", garbage);
     system("cls");
     
+}
+
+int random_pos() 
+{
+    srand(time(0));
+    return rand() % 9 + 0;
 }
 
 int moves_left(int p[])
