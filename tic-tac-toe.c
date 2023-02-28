@@ -8,7 +8,7 @@
 int garbage;
 
 void main() {
-    int find_best_move(int [], int);
+    int find_best_move(int []);
     int evaluate(int []);
     int moves_left(int []);
     char home_menu();
@@ -16,7 +16,7 @@ void main() {
     void board(int []);
     void help();
     void human_vs_human();
-    void human_vs_ai(int);
+    void human_vs_ai();
 
 
     int game_over;
@@ -37,7 +37,7 @@ void main() {
                 break;
             case '2':
                 system("cls");
-                human_vs_ai(1);
+                human_vs_ai();
                 break;
             case 'E':
                 game_over = 1;
@@ -104,7 +104,7 @@ void help()
 
     printf("How To Play: Tic-Tac-Toe\n");
     DOUBLE_NEWLINE;
-    printf("The game is played on a grid that's 3 squares by 3 squares.\n\n");
+    printf("The game played on a grid that's 3 squares by 3 squares.\n\n");
     printf("|---|---|---|\n");
     printf("| 0 | 1 | 2 |\n");
     printf("|---|---|---|\n");
@@ -113,9 +113,9 @@ void help()
     printf("| 6 | 7 | 8 |\n");
     printf("|---|---|---|\n");              
     printf("You have to enter the square's number on which you want to place your mark whether 'X' or 'O'.\n\
-[Remember not to enter a square number which is not inclusive of range(0-8), or is already occupied!]\n");
+[Remember not to enter a square number which not inclusive of range(0-8), or already occupied!]\n");
     DOUBLE_NEWLINE;
-    printf("The first player to get 3 of their marks in a row(across), column(up/down), or diagonally is the winner.\n\n");
+    printf("The first player to get 3 of their marks in a row(across), column(up/down), or diagonally the winner.\n\n");
     printf("|---|---|---|\t\t\t\t|---|---|---|\t\t\t\t|---|---|---|\n");
     printf("| X | X | X |\t\t\t\t| X |   |   |\t\t\t\t| X |   | O |\n");
     printf("|---|---|---|\t\t\t\t|---|---|---|\t\t\t\t|---|---|---|\n");
@@ -125,7 +125,7 @@ void help()
     printf("|---|---|---|\t\t\t\t|---|---|---|\t\t\t\t|---|---|---|\n");
     printf("> X makes a row(across), wins\t\t> X makes a column(up/down), wins\t> X makes a diagonal, wins\n");
     DOUBLE_NEWLINE;
-    printf("If all the squares are occupied, and no player wins, it is a draw.\n\n");
+    printf("If all the squares are occupied, and no player wins, it a draw.\n\n");
     printf("|---|---|---|\n");
     printf("| O | X | X |\n");
     printf("|---|---|---|\n");
@@ -211,26 +211,36 @@ Try again!\n");
     system("cls");
 }
 
-void human_vs_ai(int human)
+void human_vs_ai()
 {   
-    int find_best_move(int [], int);
+    int find_best_move(int []);
 
     int positions[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     int iterations;
     int user_choice;
     int win_val;
-    int ai;
+    int ai, human;
     int error;
     int running;
     int best_move;
 
     error = iterations = 0;
     running = 1;
-    ai = (human == 1) ? -1 : 1;
+    ai = 1, human = -1;
 
     while (running) {
+        best_move = find_best_move(positions);
+        board(positions);
+        positions[best_move] = ai;
+        DOUBLE_NEWLINE;
+        printf("A.I. picks square %d\n", best_move);
+        DOUBLE_NEWLINE;
         ++iterations;
-        
+
+        win_val = evaluate(positions);
+        if (win_val == 1 || win_val == -1 || iterations == 9) 
+            goto gameOver;
+
         do {
             board(positions);
             DOUBLE_NEWLINE;
@@ -242,6 +252,7 @@ void human_vs_ai(int human)
                 error = 1;
             if (positions[user_choice] == 0) {
                 positions[user_choice] = human;
+                iterations++;
                 error = 0;
             }
             else
@@ -254,18 +265,6 @@ Try again!\n");
             error = 1;
             }
         } while (error);
-
-        win_val = evaluate(positions);
-        if (win_val == 1 || win_val == -1 || iterations == 9) 
-            goto gameOver;
-
-        best_move = find_best_move(positions, ai);
-        board(positions);
-        positions[best_move] = ai;
-        DOUBLE_NEWLINE;
-        printf("A.I. picks square %d\n", best_move);
-        DOUBLE_NEWLINE;
-        ++iterations;
 
         gameOver:
             win_val = evaluate(positions);
@@ -293,7 +292,7 @@ Try again!\n");
     
 }
 
-int is_moves_left(int p[])
+int moves_left(int p[])
 {
     for (int i = 0; i <= 8; ++i)
         if (p[i] == 0)
@@ -301,32 +300,24 @@ int is_moves_left(int p[])
     return 0;
 }
 
-int find_best_move(int positions[], int player)
+int find_best_move(int positions[])
 {
     int minimax(int [], int, int);
 
-    int best_move = player == 1 ? -1000 : 1000;
+    int best_move = -1000;
     int best_pos = -1;
 
     for (int i = 0; i <= 8; ++i) {
         if (positions[i] == 0) {
-            positions[i] = player;
+            positions[i] = 1;
 
-            int moveVal = minimax(positions, 9, player == 1 ? 0 : 1);
+            int moveVal = minimax(positions, 0, 1);
 
             positions[i] = 0;
         
-            if (best_move == 1000) {
-                if (moveVal < best_move) {
-                    best_pos = i;
-                    best_move = moveVal;
-                }
-            }
-            else {
-                if (moveVal > best_move) {
-                    best_pos = i;
-                    best_move = moveVal;
-                }
+            if (moveVal > best_move) {
+                best_pos = i;
+                best_move = moveVal;
             }
         }
     }
@@ -337,21 +328,21 @@ int minimax(int p[], int depth, int maximizingPlayer)
 {   
     int max(int, int);
     int min(int, int);
-    int is_moves_left(int []);
+    int moves_left(int []);
 
     int val;
-    if ((val = evaluate(p)) == 1 || val == -1 || !is_moves_left(p) || depth == 0)
+    if ((val = evaluate(p)) == 1 || val == -1 || !moves_left(p))
         return val;
     if (maximizingPlayer) {
         int maxEval = -1000;
         for (int i = 0; i <= 8; ++i) {
             if (p[i] == 0) {
                 p[i] = 1;
-                maxEval = max(maxEval, minimax(p, depth - 1, 0));
+                maxEval = max(maxEval, minimax(p, depth + 1, 0));
                 p[i] = 0;
             }
         }
-        return maxEval - depth;
+        return maxEval;
     }
 
     else {
@@ -359,11 +350,11 @@ int minimax(int p[], int depth, int maximizingPlayer)
         for (int k = 0; k <= 8; ++k) {
             if (p[k] == 0) {
                 p[k] = -1;
-                minEval = min(minEval, minimax(p, depth - 1, 1));
+                minEval = min(minEval, minimax(p, depth + 1, 1));
                 p[k] = 0;
             }
         }
-        return minEval + depth;
+        return minEval;
     }
 }
 
