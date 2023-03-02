@@ -81,8 +81,8 @@ char home_menu() {
     printf("\'2\' to play Human v/s AI.\n");
     printf("\'E\' to exit.\n");
     DOUBLE_NEWLINE;
+    
     scanf("%c", &choice);
-
     return choice;
 
 }
@@ -150,8 +150,6 @@ void human_vs_human()
     int error;
     int running;
 
-    char current_player;
-
     error = iterations = 0;
     running = turn = 1;
 
@@ -160,15 +158,14 @@ void human_vs_human()
 
         board(positions);
         DOUBLE_NEWLINE;
-        current_player = WHOSE_TURN(turn);
-        printf("\'%c\'s move.\nChoose a square: ", current_player);
+        printf("\'%c\'s move.\nChoose a square: ", WHOSE_TURN(turn));
         scanf("%d", &user_choice);
         DOUBLE_NEWLINE;
             
         if (user_choice < 0 || user_choice > 8)
             error = 1;
 
-        if (positions[user_choice] == 0) 
+        else if (positions[user_choice] == 0) 
             positions[user_choice] = (turn == 1) ? 1 : -1;
         else 
             error = 1;
@@ -187,8 +184,8 @@ void human_vs_human()
             running = 0;
         }
         else if (iterations == 9) {  // draw
-            board(positions);
             DOUBLE_NEWLINE;
+            board(positions);
             printf("Draw!\n");
             running = 0;
         }
@@ -234,8 +231,8 @@ void human_vs_ai()
             
         }
         else {
-            best_move = find_best_move(positions);
             board(positions);
+            best_move = find_best_move(positions);
             positions[best_move] = ai;
             DOUBLE_NEWLINE;
             printf("A.I. picks square %d\n", best_move);
