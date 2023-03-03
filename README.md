@@ -1,138 +1,55 @@
 <h1 align = "center">❌ Tic-Tac-Toe ⭕</h1>
  <br>
  
-This program is a two-player, Tic-Tac-Toe boardgame, which can be played in the terminal/console window; made in Python.
-- `xState = [0,0,0,0,0,0,0,0,0]` :  This list stores the positions where `X` has been marked.
-- `oState = [0,0,0,0,0,0,0,0,0]` :  This list stores the positions where `O` has been marked.
+This program is a Tic-Tac-Toe boardgame, which can be played in the terminal/console window; made in C.
 
-## Functioning
+![image](https://user-images.githubusercontent.com/97667653/222738507-3a5af10f-74b3-4c01-8a7d-6350fc0ba949.png)
 
-The program works upon three functions defined, namely:
-- `board()`
-- `checkwin()`
-- `game()`
+Modes available to play:
+1. Human v/s Human.
+2. Human v/s A.I.	
+
 <br>
 
-### Working of `board()`
+## func `main()`
 
-The `board()` function prints the gameboard for the game. 
-It makes use of this simple logic to mark the `X`/`O` on the board:-
-`num = 'X' if xState[numc] else ('O' if oState[numc] else numc)`
-Here, `num` is the position's name in words **(zero, one.... eight)**, whereas `numc` is the cardinal value of `num`, **(0-8)**.
-```py
-    zero = 'X' if xState[0] else ('O' if oState[0] else 0)
-    one = 'X' if xState[1] else ('O' if oState[1] else 1)
-    two = 'X' if xState[2] else ('O' if oState[2] else 2)
-    three = 'X' if xState[3] else ('O' if oState[3] else 3)
-    four = 'X' if xState[4] else ('O' if oState[4] else 4)
-    five = 'X' if xState[5] else ('O' if oState[5] else 5)
-    six = 'X' if xState[6] else ('O' if oState[6] else 6)
-    seven = 'X' if xState[7] else ('O' if oState[7] else 7)
-    eight = 'X' if xState[8] else ('O' if oState[8] else 8)
-```
+It comprises of various other functions, which control the various parts of the game.
+Although the two main ones being:
+- func `human_vs_human()`
+- func `human_vs_ai()`
+	
+<hr>
 
-Further it prints the gameboard:
-```py
-	print(f" | {zero} | {one} | {two} | ")
-	print(f"-|---|---|---|-")
-	print(f" | {three} | {four} | {five} | ")
-	print(f"-|---|---|---|-")
-	print(f" | {six} | {seven} | {eight} |")
-```
+### `human_vs_human()`
+
+It allows two humans to play against each other, each time the turn alternating.
+
+![image](https://user-images.githubusercontent.com/97667653/222739003-c72f0a79-827e-4563-bdd2-d7366fb9e339.png)
+![image](https://user-images.githubusercontent.com/97667653/222739053-d4e367ff-b5b2-486d-852b-a36d204f8066.png)
+![image](https://user-images.githubusercontent.com/97667653/222739175-e2bd231d-b3d2-4770-ae2a-d226820eff8c.png)
+
+Upon *game over*, it stops the game.
+
+![image](https://user-images.githubusercontent.com/97667653/222739420-c4b5abdf-1b0b-423f-86d1-9cbf7a9c0fdc.png)
+
+<hr>
+
+### `human_vs_ai()`
+
+Initially, it offers a choice to the user.
+
+![image](https://user-images.githubusercontent.com/97667653/222739716-0bbeca26-bc78-4cae-a267-6b7f0823cc3a.png)
+
+Upon choice,
+The game starts accordingly.
+
+If the AI has to make the first move, it makes a random move using the func `random_pos()`.
+
+Otherwise, it makes use of the [minimax](https://en.wikipedia.org/wiki/Minimax) algorithm to find the best possible move.
+The A.I. move is determined upon the use of the functions `minimax()` and `find_best_move()`.
+
 <br>
 
-### Working of `checkwin()`
+*P.S. You can't win against the A.I. :wink:, it's either a draw, or a win for the computer.. Enjoy!*
 
-The `checkwin()` function checks whether any player had won or not. It does so by checking all possible winning positions-combinations.
-```py
-wins = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]]
-for win in wins:
-    if xState[win[0]] + xState[win[1]] + xState[win[2]] == 3:
-        print("'X' Won the game!")
-        return 1
-    elif oState[win[0]] + oState[win[1]] + oState[win[2]] == 3:
-        print("'O' Won the game!")
-        return 0
-return -1
-```
-<br>
-
-It returns `1` if player `X` is found to be won, elsewise it returns `0` if player `O` is found to be won.
-In cases where it no one have won, it returns `-1`, indicating a **Draw**.
-<br>
-
-### Working of `game()`
-The `game()` function has four variables defined at its beginning:
-```py
-iterations = 0
-xState = [0,0,0,0,0,0,0,0,0]
-oState = [0,0,0,0,0,0,0,0,0]
-turn = 1
-```
-`iterations` indicate the number of times the function had iterated; and a winner is declared under 8 iterations, else, when it's equal to 9, the game is considered a **Draw**.
-
-`turn` indicates whose turn it is while marking there position with there corresponding mark(`X`/`O`).
-
-An infinite-while loop iterates,
-Upon printing the gameboard, the if-else condition check whose turn it is.
-
-While taking the value input from the user, it is checked whether that corresponding position is already occupied or not, if yes, it asks the user to reconsider their choice, otherwise it continues the execution.
-
-```py
-while True:
-            board(xState, oState)
-            if turn == 1:
-                print('X\'s turn')
-                value = int(input("Enter the box no. where you want to place your 'X': "))
-                while True:
-                    if oState[value] == 0 and xState[value] == 0:
-                        xState[value] = 1
-                        break
-                    else:
-                        print("That box is already occupied!")
-                        value = int(input("Enter the box no. where you want to place your 'X': "))
-                turn = 0
-				
-            else: 
-                print('O\'s turn')
-                value = int(input("Enter the box no. where you want to place your 'O': "))
-                while True:
-                    if oState[value] == 0 and xState[value] == 0:
-                        oState[value] = 1
-                        break
-                    else:
-                        print("That box is already occupied!")
-                        value = int(input("Enter the box no. where you want to place your 'O': "))
-
-                turn = 1
-				
-```
-<br>
-
-![image](https://user-images.githubusercontent.com/97667653/178468909-bdde81ae-0b01-4f8f-b3be-aa7838ed8ebe.png)
-> An example where the user tries to mark their `O` on a position which is already occupied.
-<br>
-
-After this block of code gets executed in each iteration, `iterations` is incremented by `1`.
-
-Further this logic is implemented to terminate the game upon the result returned by `checkwin()`:-
-```py
- cwin = checkwin(xState,oState)
- if cwin != -1: 
-     print("Match Over")
-     break
- elif iterations == 9:
-     print("Draw!")
-     board(xState, oState)
-     break
-else: None
-```
-<br>
-
-The game is declared a **Draw**, if all the positions are occupied, but no winner is produced 
-*(i.e. in case of iterations being equal to 9, and the result yielded by checkwin() is -1)*.
-
-<img src = "https://user-images.githubusercontent.com/97667653/178469290-d3240b58-6b93-4bfd-99fe-d4de676d5cbc.png" align = "center">
-<img src = "https://user-images.githubusercontent.com/97667653/178469400-f8dbac06-0b7b-4271-9e56-7de147ad73d6.png" align = "middle">
-
-> A sample game
+> You are free to contribute for this repository!
