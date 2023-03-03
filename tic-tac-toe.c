@@ -144,17 +144,14 @@ void human_vs_human()
 {
 
     int positions[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-    int iterations;
-    int turn, user_choice; 
-    int win_val;
-    int error;
-    int running;
+    int turn, user_choice, win_val; 
+    int running, error, iterations; // variables controlling the gameloop
 
     error = iterations = 0;
     running = turn = 1;
 
     while (running) {
-        iterations+=1;
+        ++iterations;
 
         board(positions);
         DOUBLE_NEWLINE;
@@ -212,27 +209,25 @@ void human_vs_ai()
     int random_pos();
 
     int positions[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-    int iterations;
-    int user_choice;
     int win_val;
-    int ai, human;
-    int turn;
-    int error;
-    int running;
-    int best_move;
+    int ai, best_move; // variables for A.I.
+    int turn, human, user_choice;   // variables for human player
+    int running, error, iterations; // variables controlling the gameloop
 
     error = iterations = 0;
     turn = running = 1;
-    printf("Would you like to place your mark first, or let A.I. make the first move? (1 for to have the first move, or -1 to let A.I have the first move): ");
+    printf("Would you like to place your mark first, or let A.I. make the first move?\
+\n(1 for to have the first move, or -1 to let A.I have the first move): ");
     scanf("%d", &human);
+    system("cls");
 
     ai = ((human == 1) ? -1 : 1);
-    system("cls");
+
     while (running) {
         if (turn == ai) {
             ++iterations;
-            if (iterations == 1) {
-                positions[random_pos()] = ai;
+            if (iterations == 1) {  // A.I. makes the first move
+                positions[random_pos()] = ai;   // Make a random move
                 
             }
             else {
@@ -243,14 +238,14 @@ void human_vs_ai()
                 printf("A.I. picks square %d\n", best_move);
                 DOUBLE_NEWLINE;
             }
-            turn *= -1;
+            turn *= -1; // reverse turn
             win_val = evaluate(positions);
             if (win_val == 1 || win_val == -1 || iterations == 9) 
                 goto gameOver;
         }
 
-        if (turn == human) {
-            do {
+        else {
+            do {    // checks for any errors in the input
                 board(positions);
                 DOUBLE_NEWLINE;
                 printf("\'%c\'s move.\nChoose a square: ", WHOSE_TURN(human));
@@ -341,13 +336,13 @@ int find_best_move(int positions[], int ai)
 
             positions[i] = 0;
 
-            if (ai == -1) {
+            if (ai == -1) { 
                 if (moveVal < best_val) {
                     best_pos = i;
                     best_val = moveVal;
                 }
             }
-            else if (ai == 1) {
+            else {
                 if (moveVal > best_val) {
                     best_pos = i;
                     best_val = moveVal;
@@ -379,7 +374,7 @@ int minimax(int p[], int depth, int maximizingPlayer)
         return maxEval;
     }
 
-    else {
+    else {  // minimizing player
         int minEval = 1000; 
         for (int k = 0; k <= 8; ++k) {
             if (p[k] == 0) {
